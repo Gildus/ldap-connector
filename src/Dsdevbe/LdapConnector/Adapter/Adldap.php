@@ -13,20 +13,31 @@ class Adldap implements LdapInterface
 
     protected $_password;
 
-    protected function mapDataToUserModel($username, array $groups)
+    protected $_more_detail;
+
+    protected function mapDataToUserModel($username, array $groups, $moreFields = false)
     {
-        $model = new UserModel([
+	$dataUser = [
             'username' => $username,
             'password' => $this->_password,
-        ]);
+        ];
+        
+        if ($moreFields && is_array($moreFields)) {
+            foreach ($moreFields as $field => $value) {
+                $dataUser[$field] = $value;
+            }
+        }
+        
+        $model = new UserModel($dataUser);
         $model->setGroups($groups);
-
         return $model;
+
     }
 
     public function __construct($config)
     {
         $this->_ldap = new adLDAPService($config);
+	$this->_more_detail = $config['fields'];	
     }
 
     /**
@@ -64,8 +75,14 @@ class Adldap implements LdapInterface
             return;
         }
 
-        $groups = $this->_ldap->user()->groups($username);
+	$moreFields = array();
+        if (isset($user[0]) && count($this->_more_detail) > 0) {
+            foreach ($this->_more_detail as $field) {
+                $moreFields[$field] = isset($user[0][$field][0]) ? $user[0][$field][0] : '';
+            }            
+        }
 
-        return $this->mapDataToUserModel($username, $groups);
+        $groups = $this->_ldap->user()->groups($username);
+        return $this->mapDataToUserModel($username, $groups, $moreFields);
     }
 }

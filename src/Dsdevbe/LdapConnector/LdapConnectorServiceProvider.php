@@ -24,9 +24,7 @@ class LdapConnectorServiceProvider extends ServiceProvider
     public function boot()
     {
         Auth::extend('ldap', function ($app) {
-            $ldap = new Adldap(
-                $this->getLdapAdapterConfig('adldap')
-            );
+            $ldap = new Adldap($this->getLdapAdapterConfigComplete());
             $provider = new LdapUserProvider($ldap);
 
             return new Guard($provider, $app['session.store']);
@@ -82,4 +80,18 @@ class LdapConnectorServiceProvider extends ServiceProvider
 
         return $pluginsConfig[$pluginName];
     }
+
+
+    /**
+     * Get all data from configuration file
+     * 
+     * @return array
+     */
+    public function getLdapAdapterConfigComplete()
+    {
+        $pluginsConfig = $this->app['config']->get('ldap.plugins');
+
+        return $pluginsConfig;
+    }
+
 }

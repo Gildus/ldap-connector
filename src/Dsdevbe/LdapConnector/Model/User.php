@@ -26,10 +26,35 @@ class User implements Authenticatable
      */
     protected $_groups;
 
+    /**
+     * @var String
+     */
+    protected $_autDetail;
+
+
     public function __construct(array $attributes)
     {
         $this->_authIdentifier = $attributes['username'];
         $this->_authPassword = (isset($attributes['password'])) ? $attributes['password'] : null;
+
+	$detail = array();
+        foreach ($attributes as $field => $value) {
+            if ($field != 'username' && $field != 'password') {
+               $detail[$field] = $value;
+            }            
+        }
+        $this->_autDetail = $detail;
+    }
+
+    
+    /**
+     * Get the more details from user.
+     *
+     * @return mixed
+     */
+    public function getAutDetail()
+    {
+        return $this->_autDetail;
     }
 
     /**

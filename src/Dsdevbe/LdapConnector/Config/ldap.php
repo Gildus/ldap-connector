@@ -12,5 +12,8 @@ return [
             'admin_username' => 'admin', // This is required for session persistance in the application
             'admin_password' => 'yourPassword',
         ],
+	'fields' => [
+            'mail', 'displayname', 'department', 'telephonenumber'
+        ],
     ],
 ];
