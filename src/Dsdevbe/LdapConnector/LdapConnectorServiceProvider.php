@@ -90,7 +90,6 @@ class LdapConnectorServiceProvider extends ServiceProvider
     public function getLdapAdapterConfigComplete()
     {
         $pluginsConfig = $this->app['config']->get('ldap.plugins');
-
         return $pluginsConfig;
     }
 

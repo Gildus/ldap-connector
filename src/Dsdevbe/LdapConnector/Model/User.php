@@ -37,7 +37,7 @@ class User implements Authenticatable
         $this->_authIdentifier = $attributes['username'];
         $this->_authPassword = (isset($attributes['password'])) ? $attributes['password'] : null;
 
-	$detail = array();
+        $detail = array();
         foreach ($attributes as $field => $value) {
             if ($field != 'username' && $field != 'password') {
                $detail[$field] = $value;
@@ -52,7 +52,7 @@ class User implements Authenticatable
      *
      * @return mixed
      */
-    public function getAutDetail()
+    public function getAuthDetail()
     {
         return $this->_autDetail;
     }
